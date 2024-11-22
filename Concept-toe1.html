@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(45deg, #000000, #1a0000);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 2;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .input-group {
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            outline: none;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: -20px;
+            left: 5px;
+            font-size: 0.8em;
+            color: #ff0000;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #cc0000, #990000);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        #video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        #background-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Glitch effect */
+        .glitch {
+            animation: glitch 1s linear infinite;
+        }
+
+        @keyframes glitch {
+            2%, 64% {
+                transform: translate(2px,0) skew(0deg);
+            }
+            4%, 60% {
+                transform: translate(-2px,0) skew(0deg);
+            }
+            62% {
+                transform: translate(0,0) skew(5deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1 class="glitch">Admin Login</h1>
+        <div class="input-group">
+            <input type="text" id="username" required>
+            <label for="username">Username</label>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" required>
+            <label for="password">Password</label>
+        </div>
+        <button onclick="checkLogin()">Login</button>
+    </div>
+
+    <div id="video-container">
+        <video id="background-video" autoplay loop>
+            <source src="[CONCEPT]-TOE1.mp4" type="video/mp4">
+            Your browser does not support the video element.
+        </video>
+    </div>
+
+    <audio id="background-music" autoplay loop>
+        <source src="perturbador.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        let isLoggedIn = false;
+
+        function checkLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                isLoggedIn = true;
+                document.querySelector('.login-container').style.display = 'none';
+                document.getElementById('video-container').style.display = 'block';
+                const video = document.getElementById('background-video');
+                video.play();
+                openFullscreen();
+                lockKeys();
+                enableTouchRestrictions();
+            }
+        }
+
+        function openFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function lockKeys() {
+            window.addEventListener('keydown', function(e) {
+                if (e.key === "Backspace" || e.key === "Escape" || e.key === "F5" || 
+                    e.key === "Alt" || e.key === "Tab") {
+                    e.preventDefault();
+                }
+            });
+
+            window.addEventListener('contextmenu', e => e.preventDefault());
+
+            window.onbeforeunload = function() {
+                return "¡NO PUEDES ESCAPAR!";
+            };
+        }
+
+        function enableTouchRestrictions() {
+            // Prevenir todos los gestos táctiles después del login
+            document.addEventListener('touchstart', function(e) {
+                if (isLoggedIn) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchmove', function(e) {
+                if (isLoggedIn) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', function(e) {
+                if (isLoggedIn) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+
+        // Permitir gestos táctiles solo en el login
+        document.addEventListener('touchstart', function(e) {
+            if (!e.target.closest('.login-container') && !isLoggedIn) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        window.addEventListener('gesturestart', e => e.preventDefault());
+    </script>
+</body>
+</html>
